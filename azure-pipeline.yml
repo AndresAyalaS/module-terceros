@@ -1,0 +1,29 @@
+trigger: 
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- group: AWS_DEV
+
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Infraestructura-DevOps/devops_util_pipeline
+
+stages:
+- stage: Continous_integration
+  jobs: 
+  - job: Continous_integration
+    steps:
+      - template: pipeline-base-netcore.yml@templates
+        parameters:
+          AWS_CREDENTIALS: $(AWS_PASSWORD)
+          REPOSITORY_NAME: $(DOCKER_REPOSITORY_NAME)
+          AWS_REGION: $(AWS_REGION)
+          SONAR_NAME_PROJECT: $(SONAR_NAME_PROJECT)
+          SONAR_KEY_PROJECT: $(SONAR_NAME_PROJECT)
+          SONAR_TOKEN_LOGIN: $(SONAR_TOKEN_LOGIN)
